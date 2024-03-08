@@ -1,3 +1,13 @@
 <resources>
-  <string name="app_name">Assignment4</string>
+    <string name="app_name">Assignment4</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="product_list_fragment">PRODUCT LIST FRAGMENT</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="image">image</string>
+    <string name="product_name">Product Name</string>
+    <string name="date">Date</string>
+    <string name="price">Price</string>
+    <string name="there_are_no_products">There are no products</string>
 </resources>

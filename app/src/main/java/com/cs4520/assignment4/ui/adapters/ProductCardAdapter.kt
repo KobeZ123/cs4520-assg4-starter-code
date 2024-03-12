@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.cs4520.assignment4.R
 import com.cs4520.assignment4.data.api.models.Product
+import com.cs4520.assignment4.databinding.FragmentProductCardBinding
 
 class ProductCardAdapter(
     private val dataSet: List<Product>
@@ -17,18 +18,17 @@ class ProductCardAdapter(
     /**
      * reference to view holder
      */
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val cardContainer: ConstraintLayout = itemView.findViewById(R.id.product_card_container)
-        val imageView: ImageView = itemView.findViewById(R.id.product_image)
-        val nameText: TextView = itemView.findViewById(R.id.product_name_text)
-        val priceText: TextView = itemView.findViewById(R.id.product_price_text)
-        val dateText: TextView = itemView.findViewById(R.id.product_date_text)
+    class ViewHolder(binding: FragmentProductCardBinding) : RecyclerView.ViewHolder(binding.root) {
+        val cardContainer: ConstraintLayout = binding.productCardContainer
+        val imageView: ImageView = binding.productImage
+        val nameText: TextView = binding.productNameText
+        val priceText: TextView = binding.productPriceText
+        val dateText: TextView = binding.productDateText
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_product_card, parent, false)
-        return ViewHolder(view)
+        val binding = FragmentProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int = dataSet.size

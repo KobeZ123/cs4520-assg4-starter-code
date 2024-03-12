@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.cs4520.assignment4.R
+import com.cs4520.assignment4.databinding.FragmentLoginBinding
 
 /**
  * This LoginFragment displays the login screen,
@@ -19,22 +19,23 @@ import com.cs4520.assignment4.R
  */
 class LoginFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+    ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
+        _binding = FragmentLoginBinding.inflate(layoutInflater)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.findViewById<Button>(R.id.login_button)?.setOnClickListener {
-            val usernameField = view.findViewById<EditText>(R.id.username_field)
-            val passwordField = view.findViewById<EditText>(R.id.password_field)
+            val usernameField = binding.usernameField
+            val passwordField = binding.passwordField
 
             // checks if the user has entered the correct credentials
             if (usernameField.text.toString() == "admin"

@@ -24,24 +24,17 @@ class ProductListFragment : Fragment() {
 
     private lateinit var viewModel: ProductListViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        super.onCreate(savedInstanceState)
+        super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentProductListBinding.inflate(layoutInflater)
-
-        // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_product_list, container, false)
 
 //        val productList = productsDataset.mapToProductList()
         val productCardAdapter = ProductCardAdapter(emptyList())
-        val recyclerView: RecyclerView = rootView.findViewById(R.id.product_list_view)
+        val recyclerView: RecyclerView = binding.productListView
         recyclerView.adapter = productCardAdapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
 

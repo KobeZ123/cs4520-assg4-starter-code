@@ -9,5 +9,5 @@
     <string name="product_name">Product Name</string>
     <string name="date">Date</string>
     <string name="price">Price</string>
-    <string name="there_are_no_products">There are no products</string>
+    <string name="no_products_available">No products available</string>
 </resources>

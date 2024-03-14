@@ -1,6 +1,6 @@
 package com.cs4520.assignment4.util.mappers
 
-import com.cs4520.assignment4.data.api.models.Product
+import com.cs4520.assignment4.data.models.Product
 
 /**
  * Maps the dataset to a list of [Product]

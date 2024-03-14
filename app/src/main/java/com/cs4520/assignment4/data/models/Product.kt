@@ -1,6 +1,4 @@
-package com.cs4520.assignment4.data.api.models
-
-import com.cs4520.assignment4.data.local.entity.ProductDto
+package com.cs4520.assignment4.data.models
 
 /**
  * This interface represents a Product

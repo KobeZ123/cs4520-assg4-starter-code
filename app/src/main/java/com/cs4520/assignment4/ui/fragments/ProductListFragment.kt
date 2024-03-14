@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs4520.assignment4.ui.adapters.ProductCardAdapter
-import com.cs4520.assignment4.R
 import com.cs4520.assignment4.domain.ProductListViewModel
 import com.cs4520.assignment4.databinding.FragmentProductListBinding
 
@@ -24,6 +23,8 @@ class ProductListFragment : Fragment() {
 
     private lateinit var viewModel: ProductListViewModel
 
+    private lateinit var productCardAdapter: ProductCardAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,8 +33,7 @@ class ProductListFragment : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentProductListBinding.inflate(layoutInflater)
 
-//        val productList = productsDataset.mapToProductList()
-        val productCardAdapter = ProductCardAdapter(emptyList())
+        productCardAdapter = ProductCardAdapter(emptyList())
         val recyclerView: RecyclerView = binding.productListView
         recyclerView.adapter = productCardAdapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
@@ -48,6 +48,16 @@ class ProductListFragment : Fragment() {
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         )[ProductListViewModel::class.java]
 
+        initObservers()
+
+        viewModel.fetchProducts()
+    }
+
+    /**
+     * initializes the observers in onResume
+     */
+    override fun onResume() {
+        super.onResume()
         initObservers()
     }
 
@@ -64,12 +74,21 @@ class ProductListFragment : Fragment() {
         }
 
         viewModel.productListLiveData.observe(viewLifecycleOwner) {
-            if (it.isEmpty()) {
-                binding.noItemsText.visibility = View.VISIBLE
+            productCardAdapter.updateData(it)
+
+            if (viewModel.isLoading.value == true) {
+                binding.progressBar.visibility = View.VISIBLE
+                binding.noItemsText.visibility = View.GONE
                 binding.productListView.visibility = View.GONE
             } else {
-                binding.productListView.visibility = View.VISIBLE
-                binding.noItemsText.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
+                if (it.isEmpty()) {
+                    binding.noItemsText.visibility = View.VISIBLE
+                    binding.productListView.visibility = View.GONE
+                } else {
+                    binding.productListView.visibility = View.VISIBLE
+                    binding.noItemsText.visibility = View.GONE
+                }
             }
         }
 

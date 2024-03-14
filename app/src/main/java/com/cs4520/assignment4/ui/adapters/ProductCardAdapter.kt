@@ -1,5 +1,6 @@
 package com.cs4520.assignment4.ui.adapters
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,11 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.cs4520.assignment4.R
-import com.cs4520.assignment4.data.api.models.Product
+import com.cs4520.assignment4.data.models.Product
 import com.cs4520.assignment4.databinding.FragmentProductCardBinding
 
 class ProductCardAdapter(
-    private val dataSet: List<Product>
+    private var dataSet: List<Product>
 ) : RecyclerView.Adapter<ProductCardAdapter.ViewHolder>() {
     /**
      * reference to view holder
@@ -50,5 +51,11 @@ class ProductCardAdapter(
                 viewHolder.imageView.setImageResource(R.drawable.food)
             }
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newList: List<Product>) {
+        dataSet = newList
+        notifyDataSetChanged()
     }
 }

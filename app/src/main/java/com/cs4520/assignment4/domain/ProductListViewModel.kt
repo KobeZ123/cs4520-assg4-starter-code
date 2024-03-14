@@ -10,8 +10,7 @@ import com.cs4520.assignment4.util.constants.Api
 import com.cs4520.assignment4.data.api.ProductApi
 import com.cs4520.assignment4.data.api.ProductClient
 import com.cs4520.assignment4.data.local.ProductDatabase
-import com.cs4520.assignment4.data.api.models.Product
-import com.cs4520.assignment4.data.api.models.toProductDto
+import com.cs4520.assignment4.data.models.Product
 import com.cs4520.assignment4.data.repository.ProductRepository
 import com.cs4520.assignment4.data.repository.ProductRepositoryImpl
 import kotlinx.coroutines.launch
@@ -57,7 +56,7 @@ class ProductListViewModel(
      * if successful, post product live to live data and add to room database
      * if unsuccessful, display error message
      */
-    private fun fetchProducts() {
+    public fun fetchProducts() {
         _isLoading.postValue(true)
         viewModelScope.launch {
             try {
@@ -65,12 +64,11 @@ class ProductListViewModel(
 
                 response?.let {
                     _productListLiveData.postValue(it)
-                    productDao.addAllProducts(it.map{ product -> product.toProductDto() })
                 } ?: run {
-                    _errorMessageLiveData.postValue("There are no products.")
+                    _errorMessageLiveData.postValue("An unexpected error occurred!")
                 }
             } catch (e: Exception){
-                _errorMessageLiveData.postValue("There was an error fetching the product data!")
+                _errorMessageLiveData.postValue("An unexpected error occurred!")
             } finally {
                 _isLoading.postValue(false)
             }

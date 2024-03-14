@@ -1,9 +1,8 @@
-package com.cs4520.assignment4.data.local.entity
+package com.cs4520.assignment4.data.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.cs4520.assignment4.data.api.models.Product
 
 /**
  * The ProductDTO in the Room database.

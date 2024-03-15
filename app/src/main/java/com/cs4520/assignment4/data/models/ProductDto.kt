@@ -10,8 +10,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "product_table")
 data class ProductDto (
     @ColumnInfo(name = "name") val name: String?,
-    @ColumnInfo(name = "date") val date: String?,
-    @ColumnInfo(name = "price") val price: Int?,
+    @ColumnInfo(name = "expiryDate") val expiryDate: String?,
+    @ColumnInfo(name = "price") val price: Double?,
     @ColumnInfo(name = "type") val type: String?,
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
 )
@@ -19,10 +19,10 @@ data class ProductDto (
 fun ProductDto.toProduct(): Product {
     return when (this.type) {
         "Equipment" ->
-            Product.EquipmentProduct(this.name.orEmpty(), this.date, this.price ?: 0)
+            Product.EquipmentProduct(this.name.orEmpty(), this.expiryDate, this.price ?: 0.0)
         "Food"->
-            Product.FoodProduct(this.name.orEmpty(), this.date, this.price ?: 0)
+            Product.FoodProduct(this.name.orEmpty(), this.expiryDate, this.price ?: 0.0)
         else ->
-            Product.EquipmentProduct(this.name.orEmpty(), this.date, this.price ?: 0)
+            Product.EquipmentProduct(this.name.orEmpty(), this.expiryDate, this.price ?: 0.0)
     }
 }

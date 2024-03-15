@@ -37,7 +37,7 @@ class ProductCardAdapter(
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val product: Product = dataSet[position]
         viewHolder.nameText.text = product.name
-        viewHolder.priceText.text = String.format("$ %d", product.price)
+        viewHolder.priceText.text = String.format("$%.2f", product.price)
         viewHolder.dateText.text = product.date
         viewHolder.dateText.visibility = if (product.date != null) View.VISIBLE else View.GONE
 

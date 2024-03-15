@@ -17,7 +17,7 @@ fun List<List<Any?>>.mapToProductList(): List<Product> {
                     Product.EquipmentProduct(
                         equipmentName = it[0] as String,
                         equipmentDate = it[2] as String?,
-                        equipmentPrice = it[3] as Int,
+                        equipmentPrice = it[3] as Double,
                     )
 
                 }
@@ -25,7 +25,7 @@ fun List<List<Any?>>.mapToProductList(): List<Product> {
                     Product.FoodProduct(
                         foodName = it[0] as String,
                         foodDate = it[2] as String?,
-                        foodPrice = it[3] as Int,
+                        foodPrice = it[3] as Double,
                     )
                 else ->
                     throw IllegalStateException("The dataset has unsupported product type!")

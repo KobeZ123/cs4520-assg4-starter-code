@@ -1,10 +1,10 @@
 package com.cs4520.assignment4.data.repository
 
+import android.util.Log
 import com.cs4520.assignment4.data.api.ProductClient
 import com.cs4520.assignment4.data.models.toProduct
 import com.cs4520.assignment4.data.local.ProductDao
 import com.cs4520.assignment4.data.models.Product
-import com.cs4520.assignment4.data.models.toProductDto
 
 /**
  * implementation of the product repository to fetch product information
@@ -18,19 +18,39 @@ class ProductRepositoryImpl(
      * attempts to make api request and returns the product list if request is successful
      * else gets product list from the local room database
      */
-    override suspend fun getProduct(): List<Product>? {
-        val response = apiClient.getProducts()
-        return if (response.isSuccessful) {
-            val productListFromApi = response.body()?.getData()
-            productListFromApi?.let {
-                productDao.addAllProducts(it.map{ product -> product.toProductDto() })
+    override suspend fun getProduct(page: Int): List<Product>? {
+        return try {
+            val response = apiClient.getProducts(page)
+            if (response.isSuccessful) {
+                Log.e("KOBE SUCCESS", response.body().toString())
+                val productListFromApi = response.body()
+                if (!productListFromApi.isNullOrEmpty()) {
+                    Log.e("KOBE ADDING TO DATABASE", productListFromApi.toString())
+                    productDao.deleteAll()
+                    productDao.addAllProducts(productListFromApi)
+                }
+                productListFromApi?.map{ productDto -> productDto.toProduct() }
+            } else {
+                Log.e("KOBE NOT SUCCESS", response.message())
+
+                getProductsFromDatabase()
             }
-            productListFromApi
-        } else {
-            val networkProductList = productDao.getAllProducts()
-            networkProductList.map{
-                it.toProduct()
-            }
+        } catch (e: Exception) {
+            Log.e("KOBE EXCEPTION", e.message.toString())
+
+            getProductsFromDatabase()
+        }
+    }
+
+    /**
+     * Gets the list of products from the database
+     */
+    private suspend fun getProductsFromDatabase() : List<Product> {
+        val databaseProductList = productDao.getAllProducts()
+        Log.e("KOBE DATABASE", databaseProductList.toString())
+
+        return databaseProductList.map{
+            it.toProduct()
         }
     }
 }

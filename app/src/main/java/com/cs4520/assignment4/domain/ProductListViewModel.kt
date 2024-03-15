@@ -13,6 +13,7 @@ import com.cs4520.assignment4.data.local.ProductDatabase
 import com.cs4520.assignment4.data.models.Product
 import com.cs4520.assignment4.data.repository.ProductRepository
 import com.cs4520.assignment4.data.repository.ProductRepositoryImpl
+import com.cs4520.assignment4.util.filterList
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -51,24 +52,29 @@ class ProductListViewModel(
     val errorMessageLiveData: LiveData<String?>
         get() = _errorMessageLiveData
 
+    private var _pageNumberLiveData = MutableLiveData(1)
+
+    val pageNumberLiveData: LiveData<Int>
+        get() = _pageNumberLiveData
+
     /**
      * fetch products from the repository using coroutine
      * if successful, post product live to live data and add to room database
      * if unsuccessful, display error message
      */
-    public fun fetchProducts() {
+    public fun fetchProducts(page: Int) {
         _isLoading.postValue(true)
         viewModelScope.launch {
             try {
-                val response = repository.getProduct()
+                val response = repository.getProduct(page)
 
                 response?.let {
-                    _productListLiveData.postValue(it)
+                    _productListLiveData.postValue(it.filterList())
                 } ?: run {
-                    _errorMessageLiveData.postValue("An unexpected error occurred!")
+                    _errorMessageLiveData.postValue("Random error occurred in API response")
                 }
             } catch (e: Exception){
-                _errorMessageLiveData.postValue("An unexpected error occurred!")
+                _errorMessageLiveData.postValue(e.message)
             } finally {
                 _isLoading.postValue(false)
             }

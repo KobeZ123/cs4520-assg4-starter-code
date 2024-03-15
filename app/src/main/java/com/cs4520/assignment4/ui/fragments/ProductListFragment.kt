@@ -50,7 +50,7 @@ class ProductListFragment : Fragment() {
 
         initObservers()
 
-        viewModel.fetchProducts()
+        viewModel.fetchProducts(viewModel.pageNumberLiveData.value ?: 1)
     }
 
     /**
@@ -76,19 +76,12 @@ class ProductListFragment : Fragment() {
         viewModel.productListLiveData.observe(viewLifecycleOwner) {
             productCardAdapter.updateData(it)
 
-            if (viewModel.isLoading.value == true) {
-                binding.progressBar.visibility = View.VISIBLE
-                binding.noItemsText.visibility = View.GONE
+            if (it.isEmpty()) {
+                binding.noItemsText.visibility = View.VISIBLE
                 binding.productListView.visibility = View.GONE
             } else {
-                binding.progressBar.visibility = View.GONE
-                if (it.isEmpty()) {
-                    binding.noItemsText.visibility = View.VISIBLE
-                    binding.productListView.visibility = View.GONE
-                } else {
-                    binding.productListView.visibility = View.VISIBLE
-                    binding.noItemsText.visibility = View.GONE
-                }
+                binding.productListView.visibility = View.VISIBLE
+                binding.noItemsText.visibility = View.GONE
             }
         }
 
@@ -100,6 +93,10 @@ class ProductListFragment : Fragment() {
                     Toast.LENGTH_LONG
                 ).show()
             }
+        }
+
+        viewModel.pageNumberLiveData.observe(viewLifecycleOwner) {
+            viewModel.fetchProducts(it)
         }
     }
 }

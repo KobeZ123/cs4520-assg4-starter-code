@@ -10,7 +10,7 @@ package com.cs4520.assignment4.data.models
 sealed class Product(
     val name: String,
     val date: String?,
-    val price: Int,
+    val price: Double,
     val type: String
 ) {
     /**
@@ -23,7 +23,7 @@ sealed class Product(
     data class FoodProduct(
         val foodName: String,
         val foodDate: String?,
-        val foodPrice: Int,
+        val foodPrice: Double,
     ): Product(foodName, foodDate, foodPrice, "Food")
 
     /**
@@ -36,10 +36,6 @@ sealed class Product(
     data class EquipmentProduct(
         val equipmentName: String,
         val equipmentDate: String?,
-        val equipmentPrice: Int,
+        val equipmentPrice: Double,
     ): Product(equipmentName, equipmentDate, equipmentPrice, "Equipment")
-}
-
-fun Product.toProductDto(): ProductDto {
-    return ProductDto(name, date, price, type)
 }

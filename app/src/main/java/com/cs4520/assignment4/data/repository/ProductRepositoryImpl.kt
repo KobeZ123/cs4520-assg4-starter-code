@@ -22,21 +22,21 @@ class ProductRepositoryImpl(
         return try {
             val response = apiClient.getProducts(page)
             if (response.isSuccessful) {
-                Log.e("KOBE SUCCESS", response.body().toString())
+                Log.e("[API] SUCCESS", response.body().toString())
                 val productListFromApi = response.body()
                 if (!productListFromApi.isNullOrEmpty()) {
-                    Log.e("KOBE ADDING TO DATABASE", productListFromApi.toString())
+                    Log.e("[ROOM] ADDING TO DATABASE", productListFromApi.toString())
                     productDao.deleteAll()
                     productDao.addAllProducts(productListFromApi)
                 }
                 productListFromApi?.map{ productDto -> productDto.toProduct() }
             } else {
-                Log.e("KOBE NOT SUCCESS", response.message())
+                Log.e("[API] UNSUCCESSFUL", response.message())
 
                 getProductsFromDatabase()
             }
         } catch (e: Exception) {
-            Log.e("KOBE EXCEPTION", e.message.toString())
+            Log.e("[API] EXCEPTION", e.message.toString())
 
             getProductsFromDatabase()
         }
@@ -47,7 +47,7 @@ class ProductRepositoryImpl(
      */
     private suspend fun getProductsFromDatabase() : List<Product> {
         val databaseProductList = productDao.getAllProducts()
-        Log.e("KOBE DATABASE", databaseProductList.toString())
+        Log.e("[ROOM] LOADING FROM DATABASE", databaseProductList.toString())
 
         return databaseProductList.map{
             it.toProduct()

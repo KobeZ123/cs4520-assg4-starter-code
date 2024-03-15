@@ -1,7 +1,6 @@
 package com.cs4520.assignment4.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -114,7 +113,6 @@ class ProductListFragment : Fragment() {
 
         viewModel.pageNumberLiveData.observe(viewLifecycleOwner) {
             viewModel.fetchProducts(it)
-            Log.e("KOBE", "UPDATED PAGE NUMBER")
             binding.pageNumberText.text = it.toString()
 
             if (it <= 1) {

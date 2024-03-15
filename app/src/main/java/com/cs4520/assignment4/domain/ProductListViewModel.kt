@@ -44,8 +44,8 @@ class ProductListViewModel(
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
-    private var _productListLiveData = MutableLiveData<List<Product>>()
-    val productListLiveData: LiveData<List<Product>>
+    private var _productListLiveData = MutableLiveData<List<Product>?>()
+    val productListLiveData: LiveData<List<Product>?>
         get() = _productListLiveData
 
     private var _errorMessageLiveData = MutableLiveData<String?>(null)
@@ -62,8 +62,9 @@ class ProductListViewModel(
      * if successful, post product live to live data and add to room database
      * if unsuccessful, display error message
      */
-    public fun fetchProducts(page: Int) {
+    fun fetchProducts(page: Int) {
         _isLoading.postValue(true)
+        _productListLiveData.postValue(null)
         viewModelScope.launch {
             try {
                 val response = repository.getProduct(page)
@@ -79,5 +80,13 @@ class ProductListViewModel(
                 _isLoading.postValue(false)
             }
         }
+    }
+
+    fun onNextPageClick() {
+        _pageNumberLiveData.postValue(pageNumberLiveData.value?.plus(1))
+    }
+
+    fun onBackPageClick() {
+        _pageNumberLiveData.postValue(_pageNumberLiveData.value?.minus(1))
     }
 }

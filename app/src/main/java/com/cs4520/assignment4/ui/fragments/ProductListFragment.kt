@@ -1,6 +1,7 @@
 package com.cs4520.assignment4.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -48,9 +49,15 @@ class ProductListFragment : Fragment() {
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         )[ProductListViewModel::class.java]
 
-        initObservers()
+        binding.backButton.setOnClickListener{
+            viewModel.onBackPageClick()
+        }
 
-        viewModel.fetchProducts(viewModel.pageNumberLiveData.value ?: 1)
+        binding.nextButton.setOnClickListener{
+            viewModel.onNextPageClick()
+        }
+
+        initObservers()
     }
 
     /**
@@ -65,6 +72,11 @@ class ProductListFragment : Fragment() {
      * initializes live data observers
      */
     private fun initObservers() {
+        viewModel.isLoading.removeObservers(viewLifecycleOwner)
+        viewModel.productListLiveData.removeObservers(viewLifecycleOwner)
+        viewModel.errorMessageLiveData.removeObservers(viewLifecycleOwner)
+        viewModel.pageNumberLiveData.removeObservers(viewLifecycleOwner)
+
         viewModel.isLoading.observe(viewLifecycleOwner) {
             if (it) {
                 binding.progressBar.visibility = View.VISIBLE
@@ -74,14 +86,19 @@ class ProductListFragment : Fragment() {
         }
 
         viewModel.productListLiveData.observe(viewLifecycleOwner) {
-            productCardAdapter.updateData(it)
-
-            if (it.isEmpty()) {
-                binding.noItemsText.visibility = View.VISIBLE
+            if (it == null) {
+                binding.noItemsText.visibility = View.GONE
                 binding.productListView.visibility = View.GONE
             } else {
-                binding.productListView.visibility = View.VISIBLE
-                binding.noItemsText.visibility = View.GONE
+                productCardAdapter.updateData(it)
+
+                if (it.isEmpty()) {
+                    binding.noItemsText.visibility = View.VISIBLE
+                    binding.productListView.visibility = View.GONE
+                } else {
+                    binding.productListView.visibility = View.VISIBLE
+                    binding.noItemsText.visibility = View.GONE
+                }
             }
         }
 
@@ -97,6 +114,14 @@ class ProductListFragment : Fragment() {
 
         viewModel.pageNumberLiveData.observe(viewLifecycleOwner) {
             viewModel.fetchProducts(it)
+            Log.e("KOBE", "UPDATED PAGE NUMBER")
+            binding.pageNumberText.text = it.toString()
+
+            if (it <= 1) {
+                binding.backButton.visibility = View.INVISIBLE
+            } else {
+                binding.backButton.visibility = View.VISIBLE
+            }
         }
     }
 }

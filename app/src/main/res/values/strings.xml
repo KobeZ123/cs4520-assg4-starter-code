@@ -10,4 +10,6 @@
     <string name="date">Date</string>
     <string name="price">Price</string>
     <string name="no_products_available">No products available</string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
 </resources>
